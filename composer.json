@@ -1,0 +1,19 @@
+{
+    "name": "bits/framework",
+    "description": "BITS Framework",
+    "authors": [
+        {
+            "name": "Nurul Imam",
+            "email": "me@nurulimam.com"
+        }
+    ],
+    "require": {
+        "klein/klein": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "BITS\\": "app/models"
+        }
+    }
+}
