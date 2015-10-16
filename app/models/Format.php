@@ -26,20 +26,6 @@ class Format extends Query
         }
     }
 
-    public function date($date, $type = "stripe")
-    {
-        if ($type == "stripe") {
-            $data = date('d - F - Y', strtotime($date));
-        } elseif ($type == "slash") {
-            $data = date('d/m/Y', strtotime($date));
-        } elseif ($type == "time") {
-            $data = date('d M Y, h:i', strtotime($date));
-        } else {
-            $data = date('Y-m-d');
-        }
-        return $data;
-    }
-
     public function addComma($data)
     {
         $join = '';
