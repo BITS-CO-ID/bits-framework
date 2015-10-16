@@ -1,1 +1,3 @@
-<?php var_dump($this->users); ?>
+<?php
+// Return users
+var_dump($this->users);
