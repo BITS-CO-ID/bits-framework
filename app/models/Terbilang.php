@@ -3,18 +3,18 @@
 namespace BITS;
 
 /**
-* Generate ID or Code Format
+* Generate String Number Indonesian Format
 *
-* Allow to generate format such a TRX id, Invoice ID, etc.
+* Allow to generate string from a number.
 */
-class Format extends Query
+class Terbilang
 {
     /**
      * Convert number to string.
      * @param  int $angka number.
      * @return string     string of number.
      */
-    public function terbilang($angka)
+    public function get($angka)
     {
         $angka = (float)$angka;
         $bilangan = array(
