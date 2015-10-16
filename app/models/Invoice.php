@@ -7,39 +7,9 @@ namespace BITS;
 *
 * Allow to generate format such a TRX id, Invoice ID, etc.
 */
-class Format extends Query
+class Invoice extends Query
 {
-    public function romawi($nomor)
-    {
-        $table = array(
-            'M'=>1000,
-            'CM'=>900,
-            'D'=>500,
-            'CD'=>400,
-            'C'=>100,
-            'XC'=>90,
-            'L'=>50,
-            'XL'=>40,
-            'X'=>10,
-            'IX'=>9,
-            'V'=>5,
-            'IV'=>4,
-            'I'=>1
-        );
-        $romawi = '';
-        while ($nomor > 0) {
-            foreach ($table as $rom => $arb) {
-                if ($nomor >= $arb) {
-                    $nomor -= $arb;
-                    $romawi .= $rom;
-                    break;
-                }
-            }
-        }
-        return $romawi;
-    }
-
-    public function invoice($type, $bulan, $tahun, $company = "BITS")
+    public function get($type, $bulan, $tahun, $company = "BITS")
     {
         $maks = parent::custom("SELECT SUBSTR(MAX(no_invoice),1,5) AS id FROM invoices");
         if ($maks['id'] == '') {
