@@ -1,0 +1,16 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [BITS Framework](https://bits.co.id).
+
+## [1.0.3] - 2015-10-06
+### Changed
+- Change Login Auth Method and Rerouting admin pages.
+
+## [1.0.2] - 2015-11-05
+### Added
+- Bootstrap, jQuery, FontAwesome.
+
+## 1.0.1 - 2015-11-05
+### Added
+- This CHANGELOG file to hopefully serve as an evolving example of a standardized open source project CHANGELOG.
+- README now contains answers to common questions about CHANGELOGs
