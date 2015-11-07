@@ -12,5 +12,5 @@ $this->respond('GET', '/?', function ($request, $response, $service) {
     $service->users = BITS::all('users');
 
     // Render User template views.
-    $service->render('app/views/users.php');
+    $service->render('app/views/welcome.php');
 });

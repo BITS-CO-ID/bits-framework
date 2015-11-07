@@ -16,7 +16,13 @@ $route->respond('/', function ($request, $response, $service) {
     $service->title = 'BITS Framework';
 
     // Master Layout
-    $service->layout('app/views/layouts/default.php');
+    // $directory = "./app/views/themes/";
+    // $themes = array_diff(scandir($directory), array('..', '.'));
+    // foreach ($themes as $data) {
+    // echo $data;
+    // }
+
+    $service->layout('app/views/themes/default/default.php');
 
     // Content View
     $service->render('app/views/welcome.php');
@@ -72,7 +78,7 @@ $route->respond(function ($request, $response, $service, $app) use ($route) {
     /*
      * Register default master layout to all controllers.
      */
-    $service->layout('app/views/layouts/default.php');
+    $service->layout('app/views/themes/default/default.php');
 });
 
 /*
@@ -100,8 +106,8 @@ if (isset($_SESSION['salt']) && isset($_SESSION['username'])) {
  */
 $route->onHttpError(function ($code, $router) {
     if ($code >= 400 && $code < 500) {
-        include 'app/views/layouts/error.php';
+        include 'app/views/themes/default/error.php';
     } elseif ($code >= 500 && $code <= 599) {
-        include 'app/views/layouts/error.php';
+        include 'app/views/themes/default/error.php';
     }
 });
