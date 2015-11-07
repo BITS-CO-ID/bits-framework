@@ -34,6 +34,23 @@ class Query extends SQL
     }
 
     /**
+     * Get all data from database and retun json.
+     *
+     * @param string $table Table name.
+     * @param string $param Additional SQL parameter.
+     *
+     * @return object Get array data.
+     */
+    public function allApi($table, $param = '')
+    {
+        parent::$query = 'SELECT * FROM '.$table.' '.$param;
+        parent::prepare();
+        parent::execute();
+
+        return parent::json();
+    }
+
+    /**
      * Find Data by parameter defined.
      *
      * @param string $table    Table name.
@@ -45,7 +62,7 @@ class Query extends SQL
      */
     public function find($table, $param, $value, $optional = "")
     {
-        parent::$query = 'SELECT * FROM '.$table.' WHERE '.$param.' = '.$value.' '.$optional;
+        parent::$query = "SELECT * FROM ".$table." WHERE ".$param." = '".$value."' ".$optional;
         parent::prepare();
         parent::execute();
 

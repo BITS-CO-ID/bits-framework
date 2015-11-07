@@ -6,15 +6,15 @@ module.exports = function (grunt) {
                 src: [
                     'public/components/bootstrap/dist/css/bootstrap.min.css',
                     'public/components/font-awesome/css/font-awesome.min.css',
-                    'public/components/style.css'
+                    'public/components/custom.css'
                 ],
                 dest: 'public/css/style.css'
             },
             js: {
                 src: [
                     'public/components/jquery/dist/jquery.min.js',
-                    'public/components/bootstrap/dist/js/bootstrap.min.css',
-                    'public/components/plugin.js'
+                    'public/components/bootstrap/dist/js/bootstrap.min.js',
+                    'public/components/custom.js'
                 ],
                 dest: 'public/js/script.js'
             }
@@ -36,10 +36,10 @@ module.exports = function (grunt) {
             files: [
                     'public/components/bootstrap/dist/css/bootstrap.min.css',
                     'public/components/font-awesome/css/font-awesome.min.css',
-                    'public/components/style.css',
+                    'public/components/custom.css',
                     'public/components/jquery/dist/jquery.min.js',
-                    'public/components/bootstrap/dist/js/bootstrap.min.css',
-                    'public/components/plugin.js'
+                    'public/components/bootstrap/dist/js/bootstrap.min.js',
+                    'public/components/custom.js'
                 ],
             tasks: ['concat', 'cssmin', 'uglify'],
             options: {

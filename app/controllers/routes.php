@@ -1,6 +1,7 @@
 <?php
-
 use BITS\BITS;
+use BITS\Auth;
+
 /**
  * Uncomment if use database connections.
  * Please go to app/config/config.php & edit your database connection.
@@ -8,7 +9,7 @@ use BITS\BITS;
 //new BITS;
 
 /*
- * Default Page.
+ * Default Page Controller.
  */
 $route->respond('/', function ($request, $response, $service) {
     // Title Tag
@@ -17,8 +18,41 @@ $route->respond('/', function ($request, $response, $service) {
     // Master Layout
     $service->layout('app/views/layouts/default.php');
 
-    // Index View
+    // Content View
     $service->render('app/views/welcome.php');
+});
+
+/*
+ * Login Page Controller.
+ */
+$route->respond('/login/?', function ($request, $response, $service) {
+    $service->title = 'BITS Framework - System Login';
+    $service->render('app/views/login.php');
+});
+
+/*
+ * Check and Validate user login.
+ * If user successfully logged in, redirect to dashboard.
+ * If username or password not match in database, create flash message session.
+ */
+$route->respond('POST', '/login/?', function ($request, $response, $service) {
+    if (isset($_POST['submit'])) {
+        Auth::login("users", $_POST['username'], $_POST['password']);
+        if (isset($_SESSION['salt']) && isset($_SESSION['username'])) {
+            Auth::redirect('/system/dashboard/');
+        } else {
+            Auth::redirect('/login/');
+        }
+    }
+});
+
+/*
+ * Logout Page Controller.
+ * Destroy all session and redirect to login page.
+ */
+$route->respond('/logout/?', function ($request, $response, $service) {
+    Auth::logout();
+    Auth::redirect('/');
 });
 
 /*
@@ -26,15 +60,6 @@ $route->respond('/', function ($request, $response, $service) {
  * Add controller to this block or separate use loop controllers.
  */
 $route->respond(function ($request, $response, $service, $app) use ($route) {
-
-    /*
-     * Register some services such CRUD Service or other services to controllers.
-     * All services can access with "$app->nameofservices".
-     */
-    //$app->register('data', function () {
-        //$db = new BITS();
-        //return $db;
-    //});
 
     /*
      * Handle Error Exception message to all controllers.
@@ -57,11 +82,17 @@ $route->respond(function ($request, $response, $service, $app) use ($route) {
  *
  * Ex. foreach(array('users', 'article') as $controller)
  */
-foreach (array('users') as $controller) {
+foreach (array('users', 'api') as $controller) {
     /*
      * Asign url and file controller.
      */
     $route->with("/$controller", "app/controllers/$controller.php");
+}
+
+if (isset($_SESSION['salt']) && isset($_SESSION['username'])) {
+    foreach (array('dashboard', 'settings') as $controller) {
+        $route->with("/system/$controller", "app/controllers/system/$controller.php");
+    }
 }
 
 /*

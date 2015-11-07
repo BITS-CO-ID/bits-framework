@@ -133,4 +133,14 @@ class SQL extends DB
     {
         return self::$data->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Fetch all data with json.
+     *
+     * @return object Fetch JSON for API.
+     */
+    public function json()
+    {
+        return json_decode(self::$data->fetchAll(\PDO::FETCH_ASSOC));
+    }
 }

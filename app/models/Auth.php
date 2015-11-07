@@ -14,41 +14,40 @@ namespace BITS;
  *
  * @version 1.1
  */
-class Auth extends Data
+class Auth extends BITS
 {
+
     /**
-     * User login to access system.
-     * @param  string $username     Input username from login page.
-     * @param  string $password     Input password from login page.
-     * @return object               Create login session.
+     * Check Username to database. If exist, return password validation.
+     * @param  string $table    Table User.
+     * @param  string $fuser    Field username of table.
+     * @param  string $username Input username data.
+     * @param  string $fpass    Field password of table.
+     * @param  string $password Input password data.
+     * @return string           Session of username and salt.
      */
-    public function login($username, $password)
+    public function login($table, $username, $password, $fuser = "username", $fpass = "password")
     {
-        parent::$query = "SELECT * FROM users WHERE username = '". $username . "'";
-        parent::prepare();
-        parent::execute();
-
-        $data = parent::$data->fetchAll(\PDO::FETCH_ASSOC);
-
-        self::checkLogin();
-        /**
-         * Check validation of input login to database data.
-         * If username & password match, create name and level session.
-         */
-        if (parent::$data->rowCount() > 0) {
-            if ($username == $data[0]['username'] && password_verify($password, $data[0]['password'])) {
-                $_SESSION['user_id']    = $data[0]['id'];
-                $_SESSION['username'] = $data[0]['username'];
-                //$_SESSION['nama']    = $data[0]['nama'];
+        $userdata = parent::find($table, $fuser, $username);
+        if (empty($userdata)) {
+            $_SESSION['alert'] = 'danger';
+            $_SESSION['message'] = 'Username is not registered...!';
+        } else {
+            if (password_verify($password, $userdata[0][$fpass])) {
+                $_SESSION['username'] = $userdata[0][$fuser];
+                self::generateSalt();
+            } else {
+                $_SESSION['alert'] = 'danger';
+                $_SESSION['message'] = 'Wrong Password...!';
             }
         }
     }
 
     /**
-     * Check user login or not.
-     * @return boolean If successfully, set to true.
+     * Generate Salt Fingerprint.
+     * @return string salt.
      */
-    public function checkLogin()
+    public function generateSalt()
     {
         $fingerprint = md5($_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].date('d.m.Y'));
         if (isset($_SESSION['_USER_LOOSE_IP']) != long2ip(ip2long($_SERVER['REMOTE_ADDR'])  & ip2long("255.255.0.0"))
@@ -63,14 +62,13 @@ class Auth extends Data
             setcookie("sid", session_id(), strtotime("+1 hour"), "/", ".bits.co.id", true, true);
             session_start();
             session_regenerate_id(true);
-            $_SESSION['_REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
-            $_SESSION['_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+            $_SESSION['_REMOTE_ADDR']          = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['_USER_AGENT']           = $_SERVER['HTTP_USER_AGENT'];
             $_SESSION['_USER_ACCEPT']          = $_SERVER['HTTP_ACCEPT'];
             $_SESSION['_USER_ACCEPT_ENCODING'] = $_SERVER['HTTP_ACCEPT_ENCODING'];
             $_SESSION['_USER_ACCEPT_LANG']     = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-            $_SESSION['_USER_LOOSE_IP'] = long2ip(ip2long($_SERVER['REMOTE_ADDR'])
-                                                  & ip2long("255.255.0.0"));
-            $_SESSION['salt']  = $fingerprint;
+            $_SESSION['_USER_LOOSE_IP']        = long2ip(ip2long($_SERVER['REMOTE_ADDR']) & ip2long("255.255.0.0"));
+            $_SESSION['salt']                  = $fingerprint;
         }
     }
 
